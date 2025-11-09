@@ -24,7 +24,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # ---------------------------------------------------------------------
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost'])
 
 # ---------------------------------------------------------------------
 # Application Definition
@@ -36,6 +36,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Third-party apps
+    'rest_framework',
+    'drf_yasg',  # Swagger API documentation
 
     # Custom app
     'ip_tracking',
@@ -74,7 +78,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'alx_backend_security.wsgi.application'
 
-
 # ---------------------------------------------------------------------
 # Database Configuration
 # ---------------------------------------------------------------------
@@ -87,18 +90,10 @@ DATABASES = {
 # Password validation
 # ---------------------------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 # ---------------------------------------------------------------------
@@ -120,7 +115,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ---------------------------------------------------------------------
 # GeoIP2 Configuration
 # ---------------------------------------------------------------------
+# Path where your GeoLite2-City.mmdb is located
 GEOIP_PATH = os.path.join(BASE_DIR, 'geoip')
+
+# ---------------------------------------------------------------------
+# REST Framework Settings
+# ---------------------------------------------------------------------
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}
 
 # ---------------------------------------------------------------------
 # Rate Limiting Configuration
